@@ -275,10 +275,11 @@ nome_secundario(amina_terciaria, amino).
 
 nome_secundario(alcool, hidroxi).
 
-nome_secundario(haleto, fluor).
-nome_secundario(haleto, cloro).
-nome_secundario(haleto, bromo).
-nome_secundario(haleto, iodo).
+nome_secundario(haleto, M, Nome) :-
+    atomo(M, X, Nome),
+    halogenio(Nome),
+    atomo(M, C, carbono),
+    ligacao_simples(M, C, X).
 
 % =====================================
 % FUNÇÕES SECUNDÁRIAS
@@ -300,7 +301,8 @@ funcoes_secundarias(M, SecsFinal) :-
     findall(Termo,
     (
         member(F, ListaSemPrincipal),
-        nome_secundario(F, NomeSec),
+        (F = haleto -> nome_secundario(haleto, M, NomeSec);
+        nome_secundario(F, NomeSec)),
         Termo =.. [F, NomeSec]
     ),
     SecsFinal).
@@ -597,7 +599,7 @@ atomo(s13,n,nitrogenio).
 atomo(s13,o,oxigenio).
 
 % Haleto (cloro)
-atomo(s13,cl,cloro).
+atomo(s13,i,iodo).
 
 % Ligações da cadeia principal
 ligacaosimples(s13,c1,c2).
@@ -619,7 +621,7 @@ ligacaosimples(s13,o,h4).
 ligacaosimples(s13,c2,h5).
 
 % Haleto (Cl)
-ligacaosimples(s13,c3,cl).
+ligacaosimples(s13,c3,i).
 
 % Hidrogenios do c3
 ligacaosimples(s13,c3,h6).
