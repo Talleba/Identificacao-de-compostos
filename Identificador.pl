@@ -1,3 +1,8 @@
+:- dynamic atomo/3.
+:- dynamic ligacaosimples/3.
+:- dynamic ligacaodupla/3.
+:- dynamic ligacaotripla/3.
+
 :- discontiguous atomo/3.
 :- discontiguous ligacaosimples/3.
 :- discontiguous ligacaodupla/3.
@@ -584,13 +589,13 @@ atomo(s13,h3,hidrogenio).
 atomo(s13,h4,hidrogenio).
 atomo(s13,h5,hidrogenio).
 atomo(s13,h6,hidrogenio).
-atomo(s13,h7,hidrogenio).
-atomo(s13,h8,hidrogenio).
+
 
 % Carbonos
 atomo(s13,c1,carbono).
 atomo(s13,c2,carbono).
 atomo(s13,c3,carbono).
+atomo(s13,c4,carbono).
 
 % Nitrogenio (amina)
 atomo(s13,n,nitrogenio).
@@ -599,11 +604,15 @@ atomo(s13,n,nitrogenio).
 atomo(s13,o,oxigenio).
 
 % Haleto (cloro)
-atomo(s13,i,iodo).
+atomo(s13,cl,cloro).
+
+% Haleto (fluor)
+atomo(s13,f,fluor).
 
 % Ligações da cadeia principal
 ligacaosimples(s13,c1,c2).
 ligacaosimples(s13,c2,c3).
+ligacaosimples(s13,c3,c4).
 
 % Amina primaria (NH2)
 ligacaosimples(s13,c1,n).
@@ -620,13 +629,14 @@ ligacaosimples(s13,o,h4).
 % Hidrogenios do c2
 ligacaosimples(s13,c2,h5).
 
+% Haleto (F)
+ligacaosimples(s13,c4,f).
+
 % Haleto (Cl)
-ligacaosimples(s13,c3,i).
+ligacaosimples(s13,c3,cl).
 
 % Hidrogenios do c3
 ligacaosimples(s13,c3,h6).
-ligacaosimples(s13,c3,h7).
-ligacaosimples(s13,c3,h8).
 
 ligacaodupla(xx,a,b).
 ligacaotripla(xx,a,b).
