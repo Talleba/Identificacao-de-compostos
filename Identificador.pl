@@ -310,7 +310,10 @@ funcoes_secundarias(M, SecsFinal) :-
         nome_secundario(F, NomeSec)),
         Termo =.. [F, NomeSec]
     ),
-    SecsFinal).
+    SecsTemporaria),
+    
+    % remove duplicatas
+    sort(SecsTemporaria, SecsFinal).
 
 
 % =====================================
@@ -580,7 +583,7 @@ ligacaosimples(s12,c2,h6).
 ligacaodupla(xx,a,b).
 ligacaotripla(xx,a,b).
 
-% Molecula Simples 13 (Amina + Alcool + Haleto)
+% Molecula Simples 13 (Amina + Alcool + Haleto(Cloro) + Haleto(Fluor))
 
 % Hidrogenios
 atomo(s13,h1,hidrogenio).
@@ -607,7 +610,7 @@ atomo(s13,o,oxigenio).
 atomo(s13,cl,cloro).
 
 % Haleto (fluor)
-atomo(s13,f,fluor).
+atomo(s13,cl1,cloro).
 
 % Ligações da cadeia principal
 ligacaosimples(s13,c1,c2).
@@ -630,7 +633,7 @@ ligacaosimples(s13,o,h4).
 ligacaosimples(s13,c2,h5).
 
 % Haleto (F)
-ligacaosimples(s13,c4,f).
+ligacaosimples(s13,c4,cl1).
 
 % Haleto (Cl)
 ligacaosimples(s13,c3,cl).
