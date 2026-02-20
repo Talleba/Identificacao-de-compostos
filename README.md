@@ -325,7 +325,7 @@ Cada átomo possui um limite máximo de ligações permitido:
 
 O sistema calcula automaticamente a soma das ligações simples, duplas e triplas de cada átomo.
 
-#### Caso não se lembre da valência máxima de cada átomo, utilize o predicado ```valencia_maxima.```, ele irá imprimir a valência máxima de cada átomo.
+#### Caso não se lembre da valência máxima de cada átomo, utilize o predicado ```valencia_maxima.```. Será exibido a valência máxima de cada átomo.
 
 Exemplo:
 
@@ -351,7 +351,7 @@ iodo: 1 ligacoes
 true.
 ```
 
-#### Caso queria verificar a valência máxima de apenas um átomo, utilize o predicado ```valencia_maxima(ELEMENTO).```, ele irá imprimir a valência máxima do átomo passado.
+#### Caso queria verificar a valência máxima de apenas um átomo, utilize o predicado ```valencia_maxima(ELEMENTO).```. Será exibido a valência máxima do átomo passado.
 
 Exemplo:
 
