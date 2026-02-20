@@ -138,15 +138,18 @@ Comandos disponiveis:
 identificar_molecula(ID).                   -> Relatorio completo.
 funcao_principal(ID, Principal).            -> Apenas funcao principal.
 funcoes_secundarias(ID, Secundarias).       -> Apenas funcoes secundarias.
+molecula_existe(ID).                        -> Verifica se a molecula existe.
+molecula_valida(ID).                        -> Verifica se a molecula tem valencia valida.
 make.                                       -> Recarrega o ficheiro.
+ajuda.                                      -> Exibe esta mensagem de ajuda.
 ATENCAO: os pontos finais (.) sao obrigatorios
-true.
 ==============================================
+true.
 ```
 
 ## 4. Como Adicionar Novas Moléculas
 
-Para inserir uma nova molécula, você deve definir seus átomos e as ligações entre eles no final do 'Identificador.pl'. Siga atentamente as regras de sintaxe abaixo para evitar erros de compilação:
+Para inserir uma nova molécula, você deve definir seus átomos e as ligações entre eles no final do 'Identificador.pl'. Siga atentamente as regras de sintaxe abaixo para evitar erros de compilação. Além disso, certifique-se de que os átomos respeitam suas valências máximas, caso contrário a molécula será considerada estruturalmente inválida pelo sistema.
 
 ### A) Regras Importantes de Escrita
 
@@ -212,33 +215,33 @@ Tudo que vem logo na frente das porcentagens ```(%)``` são apenas comentários,
 
 O programa determina a função principal seguindo a ordem decrescente de prioridade exigida:
 
-**Ácido Carboxílico** (Sufixo: oico) 
+- **Ácido Carboxílico** (Sufixo: oico) 
 
-**Aldeído** (Sufixo: al) 
+- **Aldeído** (Sufixo: al) 
 
-**Cetona** (Sufixo: ona) 
+- **Cetona** (Sufixo: ona) 
 
-**Amina** (Sufixo: amina) 
+- **Amina** (Sufixo: amina) 
 
-**Álcool** (Sufixo: ol) 
+- **Álcool** (Sufixo: ol) 
 
-**Haleto** (Sufixo: eto)
+- **Haleto** (Sufixo: eto)
 
 ## 6. Nomenclatura de Grupos Secundários
 
 Quando uma molécula possui mais de um grupo funcional, o programa identifica apenas o de maior prioridade como a Função Principal. Todos os outros grupos são listados como Funções Secundárias, e seus nomes são convertidos automaticamente para a forma de substituinte:
 
-**Ácido Carboxílico:** Nunca vai ser função secundária pois possui maior prioridade
+- **Ácido Carboxílico:** Nunca vai ser função secundária pois possui maior prioridade
 
-**Aldeído:** oxo
+- **Aldeído:** oxo
 
-**Cetona:** oxo
+- **Cetona:** oxo
 
-**Amina:** amino
+- **Amina:** amino
 
-**Álcool:** hidroxi
+- **Álcool:** hidroxi
 
-**Haleto:** (o nome do átomo: cloro, bromo, iodo ou fluor.)
+- **Haleto:** (o nome do átomo: cloro, bromo, iodo ou fluor.)
 
 Exemplo:
 
@@ -261,7 +264,140 @@ Funcoes secundarias: [alcool(hidroxi),haleto(cloro),haleto(fluor)]
 true.
 ```
 
-## 7. Suporte e Contato
+## 7. Validação Estrutural e Regras de Valência
+
+O sistema possui um mecanismo interno de validação química para garantir que as moléculas criadas respeitem as regras de valência dos átomos.
+
+### A) Verificação de Existência
+
+O sistema realiza verificação automática da existência da molécula antes de executar qualquer análise.
+
+Caso uma molécula não exista na base de dados, o sistema exibirá uma mensagem informando que a molécula não foi encontrada.
+
+```
+Erro: molecula ID nao existe.
+```
+
+Exemplo:
+
+**(ENTRADA)**
+
+```
+?- identificar_molecula(s999).
+```
+
+**(SAÍDA)**
+
+```
+Erro: molecula s999 nao existe.
+false.
+```
+
+Isso se aplica aos seguintes predicados:
+
+- funcao_principal/2
+
+- funcoes_secundarias/2
+
+- identificar_molecula/1
+
+- molecula_valida/1
+
+- molecula_existe/1
+
+Observação: o predicado ```identificar_molecula/1``` possui sua própria mensagem específica, mas também informa quando a molécula não existe e ```molecula_existe/1``` apenas retorna ```false.```.
+
+### B) Regra de Valência Máxima
+
+Cada átomo possui um limite máximo de ligações permitido:
+
+- **carbono** → 4 ligações
+
+- **oxigenio** → 2 ligações
+
+- **nitrogenio** → 3 ligações
+
+- **hidrogenio** → 1 ligação
+
+- **halogenios (cloro, bromo, fluor, iodo)** → 1 ligação
+
+O sistema calcula automaticamente a soma das ligações simples, duplas e triplas de cada átomo.
+
+### C) Verificação Manual da Validade
+
+Para verificar se uma molécula respeita as regras estruturais, utilize:
+
+
+```
+?- molecula_valida(ID).
+```
+
+Caso esteja correta, será exibido:
+
+```
+true.
+```
+
+Caso algum átomo ultrapasse sua valência máxima, será exibido:
+
+```
+Erro de valencia na molecula ID: atomo ATOMO (TIPO) tem X ligacoes.
+Maximo permitido = MAX
+```
+Sendo:
+
+- **ID** → Identificador da molécula
+
+- **ATOMO** → Identificador único do átomo dentro da molécula
+
+- **TIPO** → Tipo químico do átomo
+
+- **X** → Número total de ligações que o átomo possui atualmente
+
+- **MAX** → Número máximo de ligações permitidas para o tipo de átomo (valência máxima)
+
+
+**Exemplo com uma molécula inválida:**
+
+ESTRUTURA DA MOLÉCULA:
+
+```
+% Molecula Inválida 1 (Carbono com 5 ligações)
+
+atomo(inv1,c1,carbono).
+atomo(inv1,h1,hidrogenio).
+atomo(inv1,h2,hidrogenio).
+atomo(inv1,h3,hidrogenio).
+atomo(inv1,h4,hidrogenio).
+atomo(inv1,h5,hidrogenio).
+
+ligacaosimples(inv1,c1,h1).
+ligacaosimples(inv1,c1,h2).
+ligacaosimples(inv1,c1,h3).
+ligacaosimples(inv1,c1,h4).
+ligacaosimples(inv1,c1,h5).  % <- ligação extra inválida
+
+ligacaodupla(xx,a,b).
+ligacaotripla(xx,a,b).
+```
+
+VERIFICANDO MOLÉCULA inv1:
+
+**(ENTRADA)**
+
+```
+?- molecula_valida(inv1).
+```
+
+**(SAÍDA)**
+
+```
+Erro de valencia na molecula inv1: atomo c1 (carbono) tem 5 ligacoes.
+Maximo permitido = 4
+false.
+```
+
+## 8. Suporte e Contato
 
 Caso encontre algum erro na identificação das moléculas ou tenha dificuldades na execução do módulo, entre em contato com os desenvolvedores:
 

@@ -118,13 +118,13 @@ amina_primaria(M) :-
     atomo(M,N,nitrogenio),
 
     % existe uma lista de carbonos ligados ao nitrogenio
-    findall(C, (ligacao_simples(M,N,C), atomo(M,C,carbono)), ListaCarbonos),
+    setof(C, (ligacao_simples(M,N,C), atomo(M,C,carbono)), ListaCarbonos),
 
     % existe exatamente 1 carbono ligado ao nitrogenio
-    length(ListaCarbonos, 1),
+    length(ListaCarbonos,1),
 
     % existe uma lista de hidrogenios ligados ao nitrogenio
-    findall(H, (ligacao_simples(M,N,H), atomo(M,H,hidrogenio)), ListaHidrogenios),
+    setof(H, (ligacao_simples(M,N,H), atomo(M,H,hidrogenio)), ListaHidrogenios),
 
     % existe exatamente 2 hidrogenios ligados ao nitrogenio
     length(ListaHidrogenios, 2).
@@ -140,13 +140,13 @@ amina_secundaria(M) :-
     atomo(M,N,nitrogenio),
 
     % existe uma lista de carbonos ligados ao nitrogenio
-    findall(C, (ligacao_simples(M,N,C), atomo(M,C,carbono)), ListaCarbonos),
+    setof(C, (ligacao_simples(M,N,C), atomo(M,C,carbono)), ListaCarbonos),
 
     % existe exatamente 2 carbonos ligados ao nitrogenio
     length(ListaCarbonos, 2),
 
     % existe uma lista de hidrogenios ligados ao nitrogenio
-    findall(H, (ligacao_simples(M,N,H), atomo(M,H,hidrogenio)), ListaHidrogenios),
+    setof(H, (ligacao_simples(M,N,H), atomo(M,H,hidrogenio)), ListaHidrogenios),
 
     % existe exatamente 1 hidrogenio ligado ao nitrogenio
     length(ListaHidrogenios, 1).
@@ -162,9 +162,7 @@ amina_terciaria(M) :-
     atomo(M,N,nitrogenio),
 
     % existe uma lista de carbonos ligados ao nitrogenio
-    findall(C,
-        (ligacao_simples(M,N,C), atomo(M,C,carbono)),
-        ListaCarbonos),
+    setof(C, (ligacao_simples(M,N,C), atomo(M,C,carbono)), ListaCarbonos),
 
     % existe exatamente 3 carbonos ligados ao nitrogenio
     length(ListaCarbonos, 3).
@@ -189,11 +187,11 @@ alcool(M) :-
 
     % garantir que NÃO é ácido carboxílico
     \+ (
-        ligacao_simples(M,O,C),
-        ligacao_dupla(M,C,O2),
-        atomo(M,O2,oxigenio),
-        O2 \= O
-    ).
+    ligacao_simples(M,O,C2),
+    ligacao_dupla(M,C2,O3),
+    atomo(M,O3,oxigenio),
+    O3 \= O
+).
 
 % -------------------------------------
 % HALETO
@@ -220,6 +218,13 @@ haleto(M) :-
     ligacao_simples(M,C,X).
 
 % =====================================
+% VERIFICA SE A MOLÉCULA EXISTE
+% =====================================
+
+molecula_existe(M) :-
+    atomo(M, _, _), !.
+
+% =====================================
 % PREDICADOS AUXILIARES
 % =====================================
 
@@ -243,6 +248,11 @@ detect_func(haleto, M)            :- haleto(M).
 % FUNÇÃO PRINCIPAL (com prioridade)
 % prioridade: ácido carboxílico > aldeído > cetona > amina > álcool > haleto
 % =====================================
+
+funcao_principal(M, _) :-
+    \+ molecula_existe(M),
+    write('Erro: molecula '), write(M), write(' nao existe.'), nl, !,
+    fail.
 
 funcao_principal(M, acido_carboxilico) :- acido_carboxilico(M), !.
 funcao_principal(M, aldeido)           :- aldeido(M), !.
@@ -283,14 +293,19 @@ nome_secundario(alcool, hidroxi).
 nome_secundario(haleto, M, Nome) :-
     atomo(M, X, Nome),
     halogenio(Nome),
-    atomo(M, C, carbono),
-    ligacao_simples(M, C, X).
+    ligacao_simples(M, C, X),
+    atomo(M, C, carbono).
 
 % =====================================
 % FUNÇÕES SECUNDÁRIAS
 % Retorna lista ordenada e sem nomes repetidos das funções presentes,
 % excluindo a função principal (se houver)
 % =====================================
+
+funcoes_secundarias(M, _) :-
+    \+ molecula_existe(M),
+    write('Erro: molecula '), write(M), write(' nao existe.'), nl, !,
+    fail.
 
 funcoes_secundarias(M, SecsFinal) :-
 
@@ -321,6 +336,11 @@ funcoes_secundarias(M, SecsFinal) :-
 % =====================================
 
 identificar_molecula(M) :-
+    \+ molecula_existe(M),
+    write('Erro: molecula '), write(M), write(' nao existe.'), nl, !,
+    fail.
+
+identificar_molecula(M) :-
     ( funcao_principal(M, P) ->
         sufixo(P, Suf), write('Funcao principal: '), write(P), nl,
         write('Sufixo principal: '), write(Suf), nl;   
@@ -335,9 +355,119 @@ ajuda :-
     write('identificar_molecula(ID).                   -> Relatorio completo.'), nl,
     write('funcao_principal(ID, Principal).            -> Apenas funcao principal.'), nl,
     write('funcoes_secundarias(ID, Secundarias).       -> Apenas funcoes secundarias.'), nl,
+    write('molecula_existe(ID).                        -> Verifica se a molecula existe.'), nl,
+    write('molecula_valida(ID).                        -> Verifica se a molecula tem valencia valida.'), nl,
     write('make.                                       -> Recarrega o ficheiro.'), nl,
+    write('ajuda.                                      -> Exibe esta mensagem de ajuda.'), nl,
     write('ATENCAO: os pontos finais (.) sao obrigatorios'), nl,
     write('=============================================='), nl.
+
+% =========================================
+% VALÊNCIA MÁXIMA POR TIPO DE ÁTOMO
+% =========================================
+
+valencia_maxima(carbono, 4).
+valencia_maxima(oxigenio, 2).
+valencia_maxima(nitrogenio, 3).
+valencia_maxima(hidrogenio, 1).
+valencia_maxima(cloro, 1).
+valencia_maxima(bromo, 1).
+valencia_maxima(fluor, 1).
+valencia_maxima(iodo, 1).
+
+% =========================================
+% VALOR NUMÉRICO DAS LIGAÇÕES
+% =========================================
+
+valor_ligacao(simples, 1).
+valor_ligacao(dupla, 2).
+valor_ligacao(tripla, 3).
+
+% =========================================
+% SOMA TOTAL DAS LIGAÇÕES DE UM ÁTOMO
+% =========================================
+
+soma_ligacoes(M, Atomo, Soma) :-
+
+    findall(V, (ligacaosimples(M, Atomo, _)), L1),
+
+    findall(V, (ligacaosimples(M, _, Atomo)), L2),
+
+    findall(V, (ligacaodupla(M, Atomo, _)), L3),
+
+    findall(V, (ligacaodupla(M, _, Atomo)), L4),
+
+    findall(V, (ligacaotripla(M, Atomo, _)), L5),
+
+    findall(V, (ligacaotripla(M, _, Atomo)), L6),
+
+    length(L1, N1),
+    length(L2, N2),
+
+    length(L3, N3),
+    length(L4, N4),
+
+    length(L5, N5),
+    length(L6, N6),
+
+    Soma is
+        (N1 + N2) * 1 +
+        (N3 + N4) * 2 +
+        (N5 + N6) * 3.
+
+
+% =========================================
+% VERIFICA SE UM ÁTOMO É VÁLIDO
+% =========================================
+
+valencia_valida(M, Atomo) :-
+
+    atomo(M, Atomo, Tipo),
+    valencia_maxima(Tipo, Max),
+    soma_ligacoes(M, Atomo, Soma),
+    Soma =< Max.
+
+
+% =========================================
+% VERIFICA SE A MOLÉCULA É VÁLIDA E CASO NÃO SEJA, EXIBE O ERRO DE VALÊNCIA
+% =========================================
+
+molecula_valida(M) :-
+    \+ molecula_existe(M),
+    write('Erro: molecula '), write(M), write(' nao existe.'), nl,
+    !,
+    fail.
+
+molecula_valida(M) :-
+
+    findall(Atomo,
+        (
+            atomo(M, Atomo, Tipo),
+            valencia_maxima(Tipo, Max),
+            soma_ligacoes(M, Atomo, Soma),
+            Soma > Max,
+
+            write('Erro de valencia na molecula '),
+            write(M),
+            write(': atomo '),
+            write(Atomo),
+            write(' ('),
+            write(Tipo),
+            write(') tem '),
+            write(Soma),
+            write(' ligacoes.'), nl,
+            write('Maximo permitido = '),
+            write(Max),
+            nl
+        ),
+        ListaErros
+    ),
+
+    ListaErros = [].
+
+% =========================================
+% EXEMPLOS DE MOLÉCULAS (TESTES) 
+% =========================================
 
 % Molecula Simples 1 (Ácido Carboxílico)
 
@@ -649,6 +779,24 @@ ligacaosimples(s13,c3,cl).
 
 % Hidrogenios do c3
 ligacaosimples(s13,c3,h6).
+
+ligacaodupla(xx,a,b).
+ligacaotripla(xx,a,b).
+
+% Molecula Inválida 1 (Carbono com 5 ligações)
+
+atomo(inv1,c1,carbono).
+atomo(inv1,h1,hidrogenio).
+atomo(inv1,h2,hidrogenio).
+atomo(inv1,h3,hidrogenio).
+atomo(inv1,h4,hidrogenio).
+atomo(inv1,h5,hidrogenio).
+
+ligacaosimples(inv1,c1,h1).
+ligacaosimples(inv1,c1,h2).
+ligacaosimples(inv1,c1,h3).
+ligacaosimples(inv1,c1,h4).
+ligacaosimples(inv1,c1,h5).  % <- ligação extra inválida
 
 ligacaodupla(xx,a,b).
 ligacaotripla(xx,a,b).
