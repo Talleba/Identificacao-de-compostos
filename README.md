@@ -4,7 +4,7 @@ README:
 Este programa em Prolog foi desenvolvido para a disciplina de Lógica Computacional 2. Ele identifica automaticamente a função química principal, o sufixo de nomenclatura e todas as funções secundárias de uma molécula orgânica representada como um grafo.
 
 **Grupo:**  
-Pedro Alonso Fernandes de Aguiar  
+Pedro Alonso Fernandes de Aguiar,  
 Talles Vieira Ferreira Bazani Gonçalves.
 
 
@@ -23,22 +23,22 @@ Siga as instruções padrão do instalador. No Windows, certifique-se de marcar 
 Existem duas formas principais de carregar seu trabalho no **SWI-Prolog**:
 
 **Via Menu:** 
-No menu superior, vá em File -> Consult e selecione o arquivo 'Identificador.pl'.
+No menu superior, vá em File -> Consult e selecione o arquivo ```Identificador.pl```.
 
 **Via Linha de Comando:**
 Você pode digitar o caminho do arquivo diretamente no terminal do Prolog. Para isso, você deve copiar o caminho de onde o arquivo está salvo, colocá-lo entre aspas simples e colchetes, e inverter as barras (usar ```(/)``` em vez de ```(\)```).
 
 **Atenção:**  
-Toda vez eu o arquivo for alterado, deve-se salvar o mesmo e carregar novamente no console, seja com alguma dessas formas acima ou com o make.
+Toda vez eu o arquivo for alterado, deve-se salvar o mesmo e carregar novamente no console, seja com alguma dessas formas acima ou com o ```make.```
 
 **Exemplo Genérico:**  
-Se o seu arquivo está em C:\Projetos\Prolog\Identificador.pl, você deve digitar no terminal:
+Se o seu arquivo está em ```C:\Projetos\Prolog\Identificador.pl```, você deve digitar no terminal:
 ```
 ?- ['C:/Projetos/Prolog/Identificador.pl'].
 ```
 
 **Dica:**   
-Se você fizer qualquer alteração no código (como adicionar uma nova molécula), não precisa fechar o programa ou refazer os passos. Basta digitar 'make.' (sem as aspas) e o Prolog recarregará o arquivo automaticamente, excluindo os antigos e substituindo pelos novos, afim de evitar erros no banco de dados.
+Se você fizer qualquer alteração no código (como adicionar uma nova molécula), não precisa fechar o programa ou refazer os passos. Basta digitar ```make.``` e o Prolog recarregará o arquivo automaticamente, excluindo os antigos e substituindo pelos novos, afim de evitar erros no banco de dados.
 
 **Atenção:**  
 Todas as vezes que for utilizar algum comando no console, coloque ponto final ```(.)```.
@@ -46,7 +46,7 @@ Todas as vezes que for utilizar algum comando no console, coloque ponto final ``
 ## 3. Como Consultar uma Molécula e Outros Comandos Disponíveis
 
 ### A) Identificação Completa
-Após carregar o arquivo, utilize o predicado 'identificar_molecula(ID).' (sem as aspas), onde ID é o nome dado à molécula.
+Após carregar o arquivo, utilize o predicado ```identificar_molecula(ID).```, onde ID é o nome dado à molécula.
 
 Exemplo de consulta, no **SWI-Prolog**, da molécula com ID = s13:
 
@@ -77,7 +77,7 @@ Funções secundárias: Uma lista de todos os outros grupos encontrados, exibido
 Se quiser investigar apenas uma parte da molécula, você pode usar os predicados internos:
 
 **Apenas para a Função Principal:**  
-Utilize o predicado 'funcao_principal(ID, Principal).' (sem as aspas), onde ID é o nome dado à molécula e Principal é o nome que será impresso para representar a função principal.
+Utilize o predicado ```funcao_principal(ID, Principal).```, onde ID é o nome dado à molécula e Principal é o nome que será impresso para representar a função principal.
 
 Exemplo de consulta, no **SWI-Prolog**, da molécula com ID = s13:
 
@@ -98,7 +98,7 @@ Principal = amina_primaria.
 Principal: O grupo de maior prioridade química.
 
 **Apenas para as Funções Secundárias:**   
-Utilize o predicado 'funcoes_secundarias(ID, Secundarias).' (sem as aspas), onde ID é o nome dado à molécula e Secundarias é o nome que será impresso para representar as funções secundárias.
+Utilize o predicado ```funcoes_secundarias(ID, Secundarias).```, onde ID é o nome dado à molécula e Secundarias é o nome que será impresso para representar as funções secundárias.
 
 Exemplo de consulta, no **SWI-Prolog**, da moléculas com ID = s13:
 
@@ -120,7 +120,7 @@ Secundarias: Uma lista de todos os outros grupos encontrados, exibidos com seus 
 
 ### C) Comando de Ajuda
 
-Caso não recorde quais são os comandos disponíveis para uso no console, utilize 'ajuda.' (sem aspas).
+Caso não recorde quais são os comandos disponíveis para uso no console, utilize ```ajuda.```.
 
 Exemplo:
 
@@ -149,7 +149,7 @@ true.
 
 ## 4. Como Adicionar Novas Moléculas
 
-Para inserir uma nova molécula, você deve definir seus átomos e as ligações entre eles no final do 'Identificador.pl'. Siga atentamente as regras de sintaxe abaixo para evitar erros de compilação. Além disso, certifique-se de que os átomos respeitam suas valências máximas, caso contrário a molécula será considerada estruturalmente inválida pelo sistema.
+Para inserir uma nova molécula, você deve definir seus átomos e as ligações entre eles no final do ```Identificador.pl```. Siga atentamente as regras de sintaxe abaixo para evitar erros de compilação. Além disso, certifique-se de que os átomos respeitam suas valências máximas, caso contrário a molécula será considerada estruturalmente inválida pelo sistema.
 
 ### A) Regras Importantes de Escrita
 
@@ -157,10 +157,10 @@ Para inserir uma nova molécula, você deve definir seus átomos e as ligações
 Nunca use letras maiúsculas nos nomes de moléculas, átomos ou elementos (o Prolog entende maiúsculas como variáveis e o código não funcionará).
 
 **Sem Caracteres Especiais:**  
-Não utilize símbolos, 'ç' ou acentos (use oxigenio em vez de oxigênio, hidrogenio em vez de hidrogênio).
+Não utilize símbolos, "ç" ou acentos (use oxigenio em vez de oxigênio, hidrogenio em vez de hidrogênio).
 
 **Nomes Únicos para Átomos:**  
-Cada átomo dentro de uma molécula precisa de um identificador exclusivo (ex: c1, c2, o1, o2), mesmo quando são do mesmo tipo, por exemplo c1 é carbono e c2 também. Não pode ter apenas um 'c' para representar dois carbonos diferentes, e o mesmo serve para os outros átomos, como oxigênio, hidrogênio e os demais.
+Cada átomo dentro de uma molécula precisa de um identificador exclusivo (ex: c1, c2, o1, o2), mesmo quando são do mesmo tipo, por exemplo c1 é carbono e c2 também. Não pode ter apenas um "c" para representar dois carbonos diferentes, e o mesmo serve para os outros átomos, como oxigênio, hidrogênio e os demais.
 
 ### B) Definindo Átomos
 
@@ -209,7 +209,7 @@ ligacaosimples(m1, o2, h1). % Ligação simples O-H
 Se você esquecer um ponto final ```(.)``` ao final de qualquer linha acima, o Prolog apresentará um erro de sintaxe ao carregar o arquivo.
 
 **Obs.:**  
-Tudo que vem logo na frente das porcentagens ```(%)``` são apenas comentários, eles não são necessários para o código funcionar, servem apenas para demonstrar o que está sendo feito em cada linha. Além de que, a molécula m1 não está no arquivo 'Identificador.pl', se quiser, pode utilizá-la como exemplo prático e implementá-la.
+Tudo que vem logo na frente das porcentagens ```(%)``` são apenas comentários, eles não são necessários para o código funcionar, servem apenas para demonstrar o que está sendo feito em cada linha. Além de que, a molécula m1 não está no arquivo ```Identificador.pl```, se quiser, pode utilizá-la como exemplo prático e implementá-la.
 
 ## 5. Hierarquia de Prioridade
 
