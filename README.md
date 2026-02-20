@@ -351,7 +351,7 @@ iodo: 1 ligacoes
 true.
 ```
 
-Caso queria verificar a valência máxima de apenas um átomo, utilize o predicado ```valencia_maxima(TIPO).```, ele irá imprimir a valência máxima do átomo passado.
+Caso queria verificar a valência máxima de apenas um átomo, utilize o predicado ```valencia_maxima(ELEMENTO).```, ele irá imprimir a valência máxima do átomo passado.
 
 Exemplo:
 
