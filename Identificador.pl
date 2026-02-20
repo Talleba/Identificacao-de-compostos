@@ -329,6 +329,15 @@ identificar_molecula(M) :-
     funcoes_secundarias(M, Secs),
     write('Funcoes secundarias: '), write(Secs), nl.
 
+ajuda :-
+    write('===== SISTEMA DE IDENTIFICACAO MOLECULAR ====='), nl,
+    write('Comandos disponiveis:'), nl,
+    write('identificar_molecula(ID).                   -> Relatorio completo.'), nl,
+    write('funcao_principal(ID, Principal).            -> Apenas funcao principal.'), nl,
+    write('funcoes_secundarias(ID, Secundarias).       -> Apenas funcoes secundarias.'), nl,
+    write('make.                                       -> Recarrega o ficheiro.'), nl,
+    write('ATENCAO: os pontos finais (.) sao obrigatorios'), nl,
+    write('=============================================='), nl.
 
 % Molecula Simples 1 (Ácido Carboxílico)
 
@@ -610,7 +619,7 @@ atomo(s13,o,oxigenio).
 atomo(s13,cl,cloro).
 
 % Haleto (fluor)
-atomo(s13,cl1,cloro).
+atomo(s13,f,fluor).
 
 % Ligações da cadeia principal
 ligacaosimples(s13,c1,c2).
@@ -633,7 +642,7 @@ ligacaosimples(s13,o,h4).
 ligacaosimples(s13,c2,h5).
 
 % Haleto (F)
-ligacaosimples(s13,c4,cl1).
+ligacaosimples(s13,c4,f).
 
 % Haleto (Cl)
 ligacaosimples(s13,c3,cl).
