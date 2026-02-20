@@ -140,6 +140,8 @@ funcao_principal(ID, Principal).            -> Apenas funcao principal.
 funcoes_secundarias(ID, Secundarias).       -> Apenas funcoes secundarias.
 molecula_existe(ID).                        -> Verifica se a molecula existe.
 molecula_valida(ID).                        -> Verifica se a molecula tem valencia valida.
+valencia_maxima.                            -> Consulta valencia maxima de todos os elementos.
+valencia_maxima(Elemento).                  -> Consulta valencia maxima de um elemento.
 make.                                       -> Recarrega o ficheiro.
 ajuda.                                      -> Exibe esta mensagem de ajuda.
 ATENCAO: os pontos finais (.) sao obrigatorios
@@ -323,14 +325,66 @@ Cada átomo possui um limite máximo de ligações permitido:
 
 O sistema calcula automaticamente a soma das ligações simples, duplas e triplas de cada átomo.
 
-### C) Verificação Manual da Validade
+Caso não se lembre da valência máxima de cada átomo, utilize o predicado ```valencia_maxima.```, ele irá imprimir a valência máxima de cada átomo.
 
-Para verificar se uma molécula respeita as regras estruturais, utilize:
+Exemplo:
 
+**(ENTRADA)**
 
 ```
-?- molecula_valida(ID).
+?- valencia_maxima.
 ```
+
+**(SAÍDA)**
+
+```
+===== VALENCIAS MAXIMAS =====
+carbono: 4 ligacoes
+oxigenio: 2 ligacoes
+nitrogenio: 3 ligacoes
+hidrogenio: 1 ligacoes
+cloro: 1 ligacoes
+bromo: 1 ligacoes
+fluor: 1 ligacoes
+iodo: 1 ligacoes
+==============================
+true.
+```
+
+Caso queria verificar a valência máxima de apenas um átomo, utilize o predicado ```valencia_maxima(TIPO).```, ele irá imprimir a valência máxima do átomo passado.
+
+Exemplo:
+
+**(ENTRADA)**
+
+```
+?- valencia_maxima(cloro).
+```
+
+**(SAÍDA)**
+
+```
+Valencia maxima do cloro: 1 ligacoes
+true.
+```
+
+### C) Verificação Manual da Validade da Molécula
+
+#### Para verificar se uma molécula existe no programa, utilize o predicado ```molecula_existe(ID).```
+
+Caso exista, será exibido:
+
+```
+true.
+```
+
+Caso não exista:
+
+```
+false.
+```
+
+#### Para verificar se uma molécula respeita as regras estruturais, utilize o predicado ```molecula_valida(ID).```
 
 Caso esteja correta, será exibido:
 
@@ -357,7 +411,7 @@ Sendo:
 - **MAX** → Número máximo de ligações permitidas para o tipo de átomo (valência máxima)
 
 
-**Exemplo com uma molécula inválida:**
+#### **Exemplo com uma molécula inválida:**
 
 ESTRUTURA DA MOLÉCULA:
 

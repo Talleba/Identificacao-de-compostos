@@ -349,6 +349,11 @@ identificar_molecula(M) :-
     funcoes_secundarias(M, Secs),
     write('Funcoes secundarias: '), write(Secs), nl.
 
+
+% =====================================
+% AJUDA
+% =====================================
+
 ajuda :-
     write('===== SISTEMA DE IDENTIFICACAO MOLECULAR ====='), nl,
     write('Comandos disponiveis:'), nl,
@@ -357,10 +362,37 @@ ajuda :-
     write('funcoes_secundarias(ID, Secundarias).       -> Apenas funcoes secundarias.'), nl,
     write('molecula_existe(ID).                        -> Verifica se a molecula existe.'), nl,
     write('molecula_valida(ID).                        -> Verifica se a molecula tem valencia valida.'), nl,
+    write('valencia_maxima.                            -> Consulta valencia maxima de todos os elementos.'), nl,
+    write('valencia_maxima(Elemento).                  -> Consulta valencia maxima de um elemento.'), nl,
     write('make.                                       -> Recarrega o ficheiro.'), nl,
     write('ajuda.                                      -> Exibe esta mensagem de ajuda.'), nl,
     write('ATENCAO: os pontos finais (.) sao obrigatorios'), nl,
     write('=============================================='), nl.
+
+
+% ============================================
+% Interface para consultar valências
+% ============================================
+
+% Mostra todas as valências
+valencia_maxima :-
+    writeln('===== VALENCIAS MAXIMAS ====='),
+    forall(
+        valencia_maxima(Elemento, Max),
+        format('~w: ~w ligacoes~n', [Elemento, Max])
+    ),
+    writeln('==============================').
+
+% Mostra valência de um elemento específico
+valencia_maxima(Elemento) :-
+    valencia_maxima(Elemento, Max),
+    format('Valencia maxima do ~w: ~w ligacoes~n', [Elemento, Max]), !.
+
+% Caso o elemento não exista
+valencia_maxima(Elemento) :-
+    \+ valencia_maxima(Elemento, _),
+    format('Elemento "~w" nao encontrado.~n', [Elemento]),
+    fail.
 
 % =========================================
 % VALÊNCIA MÁXIMA POR TIPO DE ÁTOMO
