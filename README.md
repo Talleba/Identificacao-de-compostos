@@ -4,7 +4,7 @@ README:
 Este programa em Prolog foi desenvolvido para a disciplina de Lógica Computacional 2. Ele identifica automaticamente a função química principal, o sufixo de nomenclatura e todas as funções secundárias de uma molécula orgânica representada como um grafo.
 
 **Grupo:**  
-Pedro Alonso Fernandes de Aguiar  
+Pedro Alonso Fernandes de Aguiar,  
 Talles Vieira Ferreira Bazani Gonçalves.
 
 
